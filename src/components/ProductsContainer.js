@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { fetchProducts } from '../actions'
 import { connect } from 'react-redux'
+import './ProductsContainer.css'
+import ProductList from './ProductList'
 
 class ProductsContainer extends Component {
   componentWillMount() {
@@ -9,9 +11,22 @@ class ProductsContainer extends Component {
   }
 
   render() {
+    const { isFetching, products, ids } = this.props
+
     return (
       <div className="ProductsContainer">
-        hejsan
+        <div className="panel">
+          <div className="row">
+            <div className="col-md-3">Sidebar</div>
+            <div className="col-md-8">
+              <ProductList
+                isFetching={isFetching}
+                products={products}
+                ids={ids}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -25,7 +40,9 @@ ProductsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    all: state.products.all,
+    products: state.products.all,
+    isFetching: state.products.isFetching,
+    ids: state.products.ids,
   }
 }
 

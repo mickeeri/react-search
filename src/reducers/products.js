@@ -51,6 +51,11 @@ const filter = (state = { query:'', categories: [] }, action) => {
         ...state,
         categories: getCategoriesFilter(state.categories, action.categoryToAdd)
       }
+    case types.ADD_SEARCH_QUERY_TO_FILTER:
+      return {
+        ...state,
+        query: action.queryToAdd,
+      }
     default:
       return state
   }
@@ -92,24 +97,35 @@ export const getArrayOfCategories = (state) => {
   return uniqueArray
 }
 
-// TODO: use different file for this.
 export const getProductsByFilter = (state) => {
-
-
   const products = state.all
   const ids = state.ids
-  const filter = getFilter(state)
+  const { categories, query } = getFilter(state)
   let filteredProductIds = []
 
-  if (!filter.categories.length) {
+  // Just return all product ids if empty categories array and
+  // blank search query.
+  if (!categories.length && !query) {
     return ids
   }
 
+  // Else return ids of products that match values
+  // in categories array.
   ids.forEach(id => {
-    if (filter.categories.includes(products[id].kategori_namn)) {
+    if (categories.includes(products[id].kategori_namn)) {
+      filteredProductIds = [...filteredProductIds, id]
+    }
+
+    const productName = products[id].produkt_namn.toLowerCase()
+
+    if (productName.includes(query.toLowerCase())) {
       filteredProductIds = [...filteredProductIds, id]
     }
   })
+
+
+
+
 
   return filteredProductIds
 }

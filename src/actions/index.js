@@ -39,3 +39,10 @@ export const addCategoryToFilter = (categoryToAdd) => (dispatch) => {
     categoryToAdd,
   })
 }
+
+export const addSeachQueryToFilter = (queryToAdd) => (dispatch) => {
+  dispatch({
+    type: types.ADD_SEARCH_QUERY_TO_FILTER,
+    queryToAdd,
+  })
+}

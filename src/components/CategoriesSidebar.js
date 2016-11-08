@@ -1,17 +1,17 @@
 import React, { PropTypes } from 'react'
 import './CategoriesSidebar.css'
 
-const CategoriesSidebar = ({ categories }) => {
+const CategoriesSidebar = ({ categories, onSelectCategory, filter }) => {
   if (!categories.length) {
     return null
   }
 
   const handleCategoryClick = (category) => {
-
+    onSelectCategory(category)
   }
 
   const getActiveState = (category) => {
-    if (category === 'LCD') {
+    if (filter.categories.includes(category)) {
       return 'active'
 
     } else {
@@ -22,12 +22,12 @@ const CategoriesSidebar = ({ categories }) => {
   return (
     <div className="CategoriesSidebar">
       <h2>Kategorier</h2>
+      <small className="text-muted">Klicka för att filtera på kategori</small>
       <ul className="CategoriesSidebar-menu">
         {categories.map(category => {
           return (
-            <li>
+            <li key={category}>
               <a
-                key={category}
                 className={`btn btn-default btn-sm ${getActiveState(category)}`}
                 onClick={() => handleCategoryClick(category)}
               >{category}</a>
@@ -41,6 +41,8 @@ const CategoriesSidebar = ({ categories }) => {
 
 CategoriesSidebar.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onSelectCategory: PropTypes.func.isRequired,
+  filter: PropTypes.object.isRequired,
 }
 
 export default CategoriesSidebar

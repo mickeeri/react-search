@@ -32,3 +32,10 @@ export const fetchProducts = (filter) => (dispatch, getState) => {
     }
   )
 }
+
+export const addCategoryToFilter = (categoryToAdd) => (dispatch) => {
+  dispatch({
+    type: types.ADD_CATEGORY_TO_FILTER,
+    categoryToAdd,
+  })
+}

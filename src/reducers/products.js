@@ -105,27 +105,42 @@ export const getProductsByFilter = (state) => {
 
   // Just return all product ids if empty categories array and
   // blank search query.
-  if (!categories.length && !query) {
+  if (!categories.length && query === '') {
     return ids
   }
 
   // Else return ids of products that match values
   // in categories array.
   ids.forEach(id => {
-    if (categories.includes(products[id].kategori_namn)) {
-      filteredProductIds = [...filteredProductIds, id]
+    if (categories.length) {
+      const productName = products[id].produkt_namn.toLowerCase()
+      if (categories.includes(products[id].kategori_namn) && productName.includes(query.toLowerCase())) {
+        filteredProductIds = [...filteredProductIds, id]
+
+        if (query !== '') {
+          if (productName.includes(query.toLowerCase()) && categories.includes(products[id].kategori_namn)) {
+            filteredProductIds = [...filteredProductIds, id]
+            filteredProductIds = filteredProductIds.filter((value, i, arr) => arr.indexOf(value) === i)
+          }
+        }
+      }
+    } else {
+
+
+
+
+      if (query !== '') {
+        const productName = products[id].produkt_namn.toLowerCase()
+
+        if (productName.includes(query.toLowerCase())) {
+          filteredProductIds = [...filteredProductIds, id]
+        }
+
+      }
+
     }
 
-    const productName = products[id].produkt_namn.toLowerCase()
-
-    if (productName.includes(query.toLowerCase())) {
-      filteredProductIds = [...filteredProductIds, id]
-    }
   })
-
-
-
-
 
   return filteredProductIds
 }

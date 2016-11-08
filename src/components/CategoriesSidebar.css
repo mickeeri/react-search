@@ -1,0 +1,25 @@
+.CategoriesSidebar .btn-group-vertical .btn.btn-default {
+  margin-top: 5px;
+}
+
+.CategoriesSidebar-menu {
+  padding: 0;
+  list-style-type: none;
+}
+
+.CategoriesSidebar-menu li a {
+  display: block;
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+.CategoriesSidebar-menu li a:hover {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #F5F5F5;
+  color: #00bcd4;
+}
+
+.CategoriesSidebar-menu li a.active {
+
+}

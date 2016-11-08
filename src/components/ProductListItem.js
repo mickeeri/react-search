@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
 
-const ProductListItem = ({ product: { produkt_id, produkt_namn, kategori_namn }}) => {
+const ProductListItem = ({ product: { produkt_id: id, produkt_namn: name, kategori_namn: category }}) => {
   return (
     <li className="list-group-item">
-      {produkt_namn}
+      {name}
+      <small className="label label-default pull-right">{category}</small>
     </li>
   )
 }

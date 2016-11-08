@@ -25,6 +25,17 @@ const ids = (state = [], action) => {
   }
 }
 
+// const categories = (state = [], action) => {
+//   switch (action.type) {
+//     case types.FETCH_PRODUCTS_REQUEST:
+//       return []
+//     case types.FETCH_PRODUCTS_SUCCESS:
+//       return Object.keys(action.response.entities.products).map((k) => action.response.entities.products[k]['kategori_namn'])
+//     default:
+//       return state
+//   }
+// }
+
 const isFetching = (state = false, action) => {
   switch (action.type) {
     case types.FETCH_PRODUCTS_REQUEST:
@@ -44,3 +55,16 @@ export default combineReducers({
 })
 
 export const getIsFetching = (state) => state.isFetching
+
+// Creates an array of product categories.
+export const getArrayOfCategories = (state) => {
+  const obj = state.all
+
+  // Create the array.
+  const allCategories = Object.keys(obj).map((key) => obj[key]['kategori_namn'])
+
+  // Remove duplicates.
+  const uniqueArray = allCategories.filter((value, i, arr) => arr.indexOf(value) === i)
+
+  return uniqueArray
+}

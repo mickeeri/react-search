@@ -15,6 +15,7 @@ const ProductList = ({ isFetching, ids, products }) => {
 
   return (
     <div className="ProductList">
+      <h2>Produkter</h2>
       <ul className="list-group">
         {ids.map(key =>
           <ProductListItem key={key} product={products[key]} />

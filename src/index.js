@@ -1,15 +1,12 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import App from './App'
+import { render } from 'react-dom'
+import Root from './components/Root'
 import configureStore from './configureStore'
 import './index.css'
 
 const store = configureStore()
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+render(
+  <Root store={store} />,
   document.getElementById('root')
 )

@@ -1,13 +1,13 @@
 
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import rootReducer from './rootReducer'
+import rootReducer from './reducers'
 
 const middlewares = [thunk]
 
 const configureStore = (initialState) => {
   // Dont't want the redux form actions in redux dev tools.
-  const blacklist = []
+  const blacklist = ['redux-form*']
 
 
   const store = createStore(rootReducer, initialState, compose(

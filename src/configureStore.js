@@ -1,23 +1,19 @@
-
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import createLogger from 'redux-logger'
 import rootReducer from './reducers'
 
-const middlewares = [thunk]
+const configureStore = () => {
+  const middlewares = [thunk]
 
-const configureStore = (initialState) => {
-  // Dont't want the redux form actions in redux dev tools.
-  const blacklist = ['redux-form*']
+  if (process.env.NODE_ENV !== 'production') {
+    middlewares.push(createLogger())
+  }
 
-
-  const store = createStore(rootReducer, initialState, compose(
-    applyMiddleware(...middlewares),
-    window.devToolsExtension && window.devToolsExtension({
-      actionsBlacklist: blacklist
-    })
-  ))
-
-  return store
+  return createStore(
+    rootReducer,
+    applyMiddleware(...middlewares)
+  )
 }
 
 export default configureStore

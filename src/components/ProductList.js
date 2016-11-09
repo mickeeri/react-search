@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react'
 import Loader from './Loader'
 import ProductListItem from './ProductListItem'
 import SearchBar from './SearchBar'
+import ResetFilterButton from './ResetFilterButton'
 
-const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, retryFetch }) => {
+const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, retryFetch, onResetFilter }) => {
 
   // Show loader if fetching from api.
   if (isFetching && !products.length) {
@@ -20,7 +21,6 @@ const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, ret
             className="btn btn-primary"
             onClick={() => retryFetch()}
           >Försök igen</button>
-
         </div>
       </div>
     )
@@ -32,9 +32,15 @@ const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, ret
         <div className="col-md-3">
           <h2>Produkter</h2>
         </div>
-        <div className="col-md-9">
+        <div className="col-md-7">
           <SearchBar
             onSearch={onSearch}
+            filter={filter}
+          />
+        </div>
+        <div className="col-md-2">
+          <ResetFilterButton
+            onResetFilter={onResetFilter}
             filter={filter}
           />
         </div>
@@ -55,6 +61,7 @@ ProductList.propTypes = {
   filter: PropTypes.object.isRequired,
   errorMessage: PropTypes.string,
   retryFetch: PropTypes.func.isRequired,
+  onResetFilter: PropTypes.func.isRequired,
 }
 
 export default ProductList

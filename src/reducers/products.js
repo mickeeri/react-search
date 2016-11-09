@@ -47,6 +47,11 @@ const filter = (state = { query: '', categories: [] }, action) => {
         ...state,
         query: action.queryToAdd,
       }
+    case types.RESET_PRODUCTS_FILTER:
+      return {
+        query: '',
+        categories: [],
+      }
     default:
       return state
   }

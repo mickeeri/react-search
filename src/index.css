@@ -8,3 +8,7 @@ body {
   padding: 4px 10px;
   background-color: #FF4081;
 }
+
+.ResetFilterButton, .SearchBar .form-control {
+  margin-top: 20px;
+}

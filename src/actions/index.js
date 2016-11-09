@@ -52,3 +52,12 @@ export const addSeachQueryToFilter = (queryToAdd) => (dispatch) => {
     queryToAdd,
   })
 }
+
+/**
+ * Reset the filter
+ */
+export const resetFilter = () => (dispatch) => {
+  dispatch({
+    type: types.RESET_PRODUCTS_FILTER,
+  })
+}

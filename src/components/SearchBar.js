@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react'
-import './SearchBar.css'
 
 const SearchBar = ({filter, onSearch}) => {
-
   const handleOnSearch = (inputValue) => {
     onSearch(inputValue)
   }

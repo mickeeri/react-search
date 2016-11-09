@@ -3,7 +3,7 @@
 // https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.p28lloz3l
 
 import React, { Component, PropTypes } from 'react'
-import { fetchProducts, addCategoryToFilter, addSeachQueryToFilter } from '../actions'
+import { fetchProducts, addCategoryToFilter, addSeachQueryToFilter, resetFilter } from '../actions'
 import { connect } from 'react-redux'
 import './ProductsContainer.css'
 import ProductList from './ProductList'
@@ -16,6 +16,7 @@ class ProductsContainer extends Component {
     this.addCategoryToFilter = this.addCategoryToFilter.bind(this)
     this.addSeachQueryToFilter = this.addSeachQueryToFilter.bind(this)
     this.retryFetchProducts = this.retryFetchProducts.bind(this)
+    this.resetFilter = this.resetFilter.bind(this)
   }
 
   componentWillMount() {
@@ -32,6 +33,10 @@ class ProductsContainer extends Component {
 
   retryFetchProducts() {
     this.props.dispatch(fetchProducts())
+  }
+
+  resetFilter() {
+    this.props.dispatch(resetFilter())
   }
 
   render() {
@@ -55,6 +60,7 @@ class ProductsContainer extends Component {
               filter={filter}
               onSearch={this.addSeachQueryToFilter}
               retryFetch={this.retryFetchProducts}
+              onResetFilter={this.resetFilter}
             />
           </div>
         </div>

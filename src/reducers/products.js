@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import * as types from '../constants/ActionTypes'
+import Fuse from 'fuse.js'
 
 const getCategoriesFilter = (currentCategories, categoryToAdd) => {
   // If category is already in categories, remove it.
@@ -125,7 +126,21 @@ const bySearchQuery = ({ produkt_namn }, query) => {
     throw new Error('Expected query to be a string.')
   }
 
-  return produkt_namn.toLowerCase().includes(query.toLowerCase())
+}
+
+const filteredBySeachQuery = (products, query) => {
+  // Using fuse fuzzy-search library to filter by product name.
+  const options = {
+    shouldSort: true,
+    threshold: 0.2,
+    location: 0,
+    tokenize: true,
+    matchAllTokens: true,
+    keys: ["produkt_namn"]
+  };
+
+  const fuse = new Fuse(products, options)
+  return fuse.search(query.trim())
 }
 
 // Returns array of product objects after being filtered by query and category.
@@ -147,7 +162,7 @@ export const getProductsByFilter = ({ ids, all, filter: { categories, query }}) 
 
   // Filter by search query if query is not empty.
   if (query !== '') {
-    products = products.filter((product) => bySearchQuery(product, query))
+    products = filteredBySeachQuery(products, query.trim())
   }
 
   return products

@@ -1,7 +1,6 @@
 ### Readme
-This is a Single Page Application with a faked faked backend. The app is developed with
-React, Redux, babel and more. It uses [Create React App](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html)
-for configuration.
+This is a Single Page Application developed with React, Redux, Babel, Fuse fuzzy-search and more.
+It uses a fake backend with response times and networks errors. Configuration with  [Create React App](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html).
 
 #### Development
 1. Requires node.js and npm. I used node v7.0.0.

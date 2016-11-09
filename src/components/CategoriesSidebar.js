@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import './CategoriesSidebar.css'
-import 'array-includes'
 
 const CategoriesSidebar = ({ categories, onSelectCategory, filter }) => {
   if (!categories.length) {
@@ -12,7 +11,7 @@ const CategoriesSidebar = ({ categories, onSelectCategory, filter }) => {
   }
 
   const getActiveClass = (category) => {
-    return filter.categories.includes(category) ? 'active' : ''
+    return filter.categories.indexOf(category) >= 0 ? 'active' : ''
   }
 
   return (

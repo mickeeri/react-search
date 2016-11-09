@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux'
 import * as types from '../constants/ActionTypes'
 import Fuse from 'fuse.js'
-import 'array-includes'
 
 const getCategoriesFilter = (currentCategories, categoryToAdd) => {
   // If category is already in categories, remove it.
-  if (currentCategories.includes(categoryToAdd)) {
+  if (currentCategories.indexOf(categoryToAdd) >= 0) {
     const index = currentCategories.indexOf(categoryToAdd)
     return [
       ...currentCategories.slice(0, index),
@@ -118,7 +117,7 @@ const byCategories = ({ kategori_namn }, categories) => {
     throw new Error('Expected categories to be an array.')
   }
 
-  return categories.includes(kategori_namn)
+  return categories.indexOf(kategori_namn) >= 0
 }
 
 // Filter product by search query.

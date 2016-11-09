@@ -135,12 +135,14 @@ export const getProductsByFilter = ({ ids, all, filter: { categories, query }}) 
 
   // Return all products if filters are empty.
   if (!categories.length && query === '') {
-    return products
+    return products.sort((a, b) => a.produkt_namn < b.produkt_namn ? -1 : 1)
   }
 
   // Filter the array of products by categories.
   if (categories.length) {
-    products = products.filter((product) => byCategories(product, categories))
+    products = products
+      .filter((product) => byCategories(product, categories))
+      .sort((a, b) => a.produkt_namn < b.produkt_namn ? -1 : 1)
   }
 
   // Filter by search query if query is not empty.

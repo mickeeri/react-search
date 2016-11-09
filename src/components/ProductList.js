@@ -9,7 +9,7 @@ const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, ret
   if (isFetching && !products.length) {
     return (
       <div>
-        <Loader /><small>Hämtar produkter</small>
+        <Loader /><span>Hämtar produkter</span>
       </div>
     )
   }

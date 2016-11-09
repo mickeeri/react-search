@@ -6,6 +6,11 @@ import products from './products.json'
 const delay = (ms) =>
   new Promise(resolve => setTimeout(resolve, ms))
 
+/**
+ * This is used to simulate fetching of products from a backend API.
+ * Has delay and occational error.
+ * @return {Array}
+ */
 export const fetchProducts = () => {
   return delay(1000).then(() => {
     // Simulate network errors.

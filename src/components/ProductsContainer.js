@@ -19,7 +19,6 @@ class ProductsContainer extends Component {
   }
 
   componentWillMount() {
-    // Fetch all products from "API"
     this.props.dispatch(fetchProducts())
   }
 

@@ -2,6 +2,13 @@ import { combineReducers } from 'redux'
 import * as types from '../constants/ActionTypes'
 import Fuse from 'fuse.js'
 
+/**
+ * Returns new array of categories for the filter object.
+ * Using slice to return shallow copy of array.
+ * @param  {Array} currentCategories
+ * @param  {string} categoryToAdd
+ * @return {Array} new categories
+ */
 const getCategoriesFilter = (currentCategories, categoryToAdd) => {
   // If category is already in categories, remove it.
   if (currentCategories.indexOf(categoryToAdd) >= 0) {
@@ -11,8 +18,7 @@ const getCategoriesFilter = (currentCategories, categoryToAdd) => {
       ...currentCategories.slice(index + 1)
     ]
   } else {
-    // Else just return a shallow copy of the
-    // array with the new category.
+    // Else just add the new category.
     return [
       ...currentCategories,
       categoryToAdd
@@ -20,25 +26,10 @@ const getCategoriesFilter = (currentCategories, categoryToAdd) => {
   }
 }
 
-const all = (state = {}, action) => {
+const products = (state = [], action) => {
   switch (action.type) {
     case types.FETCH_PRODUCTS_SUCCESS:
-      return {
-        ...state,
-        ...action.response.entities.products,
-      }
-    default:
-      return state
-  }
-}
-
-const ids = (state = [], action) => {
-  switch(action.type) {
-    case types.FETCH_PRODUCTS_SUCCESS:
-      return [
-        ...state,
-        ...action.response.result,
-      ]
+      return action.response
     default:
       return state
   }
@@ -85,9 +76,8 @@ const errorMessage = (state = null, action) => {
 }
 
 export default combineReducers({
-  all,
+  products,
   isFetching,
-  ids,
   filter,
   errorMessage,
 })
@@ -98,20 +88,27 @@ export const getFilter = (state) => state.filter
 
 export const getErrorMessage = (state) => state.errorMessage
 
-// Creates an array of product categories.
-export const getArrayOfCategories = ({ all }) => {
-  const obj = all
-
+/**
+ * Creates and retuns an array with product categories
+ * @param  {Array} products
+ * @return {Array} product categories
+ */
+export const getArrayOfCategories = ({ products }) => {
   // Create the array.
-  const allCategories = Object.keys(obj).map((key) => obj[key]['kategori_namn'])
+  const allCategories = products.map((product) => product['kategori_namn'])
 
   // Remove duplicates.
   const uniqueArray = allCategories.filter((value, i, arr) => arr.indexOf(value) === i)
 
-  return uniqueArray
+  return uniqueArray.sort((a, b) => a < b ? -1 : 1)
 }
 
-// Filter product with array of categories.
+/**
+ * Match a single product by category name.
+ * @param  {string} kategori_namn
+ * @param  {Array} categories
+ * @return {bool} true if match
+ */
 const byCategories = ({ kategori_namn }, categories) => {
   if (!Array.isArray(categories)) {
     throw new Error('Expected categories to be an array.')
@@ -120,35 +117,36 @@ const byCategories = ({ kategori_namn }, categories) => {
   return categories.indexOf(kategori_namn) >= 0
 }
 
-// Filter product by search query.
-const bySearchQuery = ({ produkt_namn }, query) => {
-  if (typeof query !== 'string') {
-    throw new Error('Expected query to be a string.')
-  }
-
-}
-
+/**
+ * Filter an array of products by search query, using
+ * the Fuse fuzzy-search-library.
+ * @param  {Array} products
+ * @param  {string} query
+ * @return {Array} Search result
+ */
 const filteredBySeachQuery = (products, query) => {
-  // Using fuse fuzzy-search library to filter by product name.
   const options = {
     shouldSort: true,
     threshold: 0.2,
     location: 0,
     tokenize: true,
     matchAllTokens: true,
-    keys: ["produkt_namn"]
+    keys: ["produkt_namn", "kategori_namn"]
   };
 
   const fuse = new Fuse(products, options)
   return fuse.search(query.trim())
 }
 
-// Returns array of product objects after being filtered by query and category.
-export const getProductsByFilter = ({ ids, all, filter: { categories, query }}) => {
-  // Create an array of product objects.
-  let products = ids.map(id => all[id])
-
-  // Return all products if filters are empty.
+/**
+ * Creates and returns an array of products after it has has been
+ * passed through a number of filters.
+ * @param  {Array} products
+ * @param  {Object} filter
+ * @return {Array}  Returns array of product objects.
+ */
+export const getProductsByFilter = ({ products, filter: { categories, query }}) => {
+  // Return all products sorted by product name if filters are empty.
   if (!categories.length && query === '') {
     return products.sort((a, b) => a.produkt_namn < b.produkt_namn ? -1 : 1)
   }

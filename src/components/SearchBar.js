@@ -12,7 +12,7 @@ const SearchBar = ({filter, onSearch}) => {
       <input
         className="form-control"
         type="text"
-        placeholder="Sök på produkt"
+        placeholder="Sök på produkt eller kategori"
         value={filter.query}
         onChange={(e) => handleOnSearch(e.target.value)}
       />

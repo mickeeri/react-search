@@ -7,11 +7,7 @@ const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, ret
 
   // Show loader if fetching from api.
   if (isFetching && !products.length) {
-    return (
-      <div>
-        <Loader /><span>Hämtar produkter</span>
-      </div>
-    )
+    return <Loader />
   }
 
   // Show error message if there is one.
@@ -58,6 +54,7 @@ ProductList.propTypes = {
   onSearch: PropTypes.func.isRequired,
   filter: PropTypes.object.isRequired,
   errorMessage: PropTypes.string,
+  retryFetch: PropTypes.func.isRequired,
 }
 
 export default ProductList

@@ -1,11 +1,11 @@
-import { normalize } from 'normalizr'
 import * as api from '../api'
 import { getIsFetching } from '../reducers/products'
 import * as types from '../constants/ActionTypes'
-import * as schema from './schema'
 
-// Fetch all products from api.
-export const fetchProducts = (filter) => (dispatch, getState) => {
+/**
+ * Fetches all products from "API".
+ */
+export const fetchProducts = () => (dispatch, getState) => {
   // Resolve promise if already is fetching.
   if (getIsFetching(getState().products)) {
     return Promise.resolve()
@@ -15,14 +15,11 @@ export const fetchProducts = (filter) => (dispatch, getState) => {
     type: types.FETCH_PRODUCTS_REQUEST,
   })
 
-  return api.fetchProducts(filter).then(
+  return api.fetchProducts().then(
     response => {
       dispatch({
         type: types.FETCH_PRODUCTS_SUCCESS,
-        // Using normalizr to create a products object that
-        // is easier to handle with redux. Maybe unnecessary in this case
-        // but good practice if app is to have crud functionality in the future.
-        response: normalize(response, schema.arrayOfProducts),
+        response,
       })
     },
     error => {
@@ -34,6 +31,10 @@ export const fetchProducts = (filter) => (dispatch, getState) => {
   )
 }
 
+/**
+ * Dispatches action when new category is to be added to filter.
+ * @param {string} categoryToAdd
+ */
 export const addCategoryToFilter = (categoryToAdd) => (dispatch) => {
   dispatch({
     type: types.ADD_CATEGORY_TO_FILTER,
@@ -41,6 +42,10 @@ export const addCategoryToFilter = (categoryToAdd) => (dispatch) => {
   })
 }
 
+/**
+ * Add user input from search field to the filter.
+ * @param {string} queryToAdd
+ */
 export const addSeachQueryToFilter = (queryToAdd) => (dispatch) => {
   dispatch({
     type: types.ADD_SEARCH_QUERY_TO_FILTER,

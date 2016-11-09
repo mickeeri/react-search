@@ -1,9 +1,9 @@
-.Loader {
-  animation: Loader-spin infinite 2s linear;
+.Loader-img {
+  animation: Loader-img-spin infinite 2s linear;
   height: 50px;
 }
 
-@keyframes Loader-spin {
+@keyframes Loader-img-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }

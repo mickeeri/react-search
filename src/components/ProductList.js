@@ -3,13 +3,29 @@ import Loader from './Loader'
 import ProductListItem from './ProductListItem'
 import SearchBar from './SearchBar'
 
-const ProductList = ({ isFetching, ids, products, onSearch, filter }) => {
+const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, retryFetch }) => {
 
   // Show loader if fetching from api.
-  if (isFetching && !ids.length) {
+  if (isFetching && !products.length) {
     return (
       <div>
         <Loader /><small>Hämtar produkter</small>
+      </div>
+    )
+  }
+
+  // Show error message if there is one.
+  if (!isFetching && errorMessage) {
+    return (
+      <div className="alert alert-danger">
+        {errorMessage}
+        <div className="text-right">
+          <button
+            className="btn btn-primary"
+            onClick={() => retryFetch()}
+          >Försök igen</button>
+
+        </div>
       </div>
     )
   }
@@ -28,8 +44,8 @@ const ProductList = ({ isFetching, ids, products, onSearch, filter }) => {
         </div>
       </div>
       <ul className="list-group">
-        {ids.map(key =>
-          <ProductListItem key={key} product={products[key]} />
+        {products.map(product =>
+          <ProductListItem key={product.produkt_id} product={product} />
         )}
       </ul>
     </div>
@@ -37,11 +53,11 @@ const ProductList = ({ isFetching, ids, products, onSearch, filter }) => {
 }
 
 ProductList.propTypes = {
-  products: PropTypes.object,
-  ids: PropTypes.array,
+  products: PropTypes.array,
   isFetching: PropTypes.bool.isRequired,
   onSearch: PropTypes.func.isRequired,
   filter: PropTypes.object.isRequired,
+  errorMessage: PropTypes.string,
 }
 
 export default ProductList

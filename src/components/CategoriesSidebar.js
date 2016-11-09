@@ -10,25 +10,19 @@ const CategoriesSidebar = ({ categories, onSelectCategory, filter }) => {
     onSelectCategory(category)
   }
 
-  const getActiveState = (category) => {
-    if (filter.categories.includes(category)) {
-      return 'active'
-
-    } else {
-      return ''
-    }
+  const getActiveClass = (category) => {
+    return filter.categories.includes(category) ? 'active' : ''
   }
 
   return (
     <div className="CategoriesSidebar">
-      <h2>Kategorier</h2>
       <small className="text-muted">Klicka för att filtera på kategori</small>
       <ul className="CategoriesSidebar-menu">
         {categories.map(category => {
           return (
             <li key={category}>
               <a
-                className={`btn btn-default btn-sm ${getActiveState(category)}`}
+                className={`btn btn-default btn-sm ${getActiveClass(category)}`}
                 onClick={() => handleCategoryClick(category)}
               >{category}</a>
             </li>

@@ -20,14 +20,15 @@ export const fetchProducts = (filter) => (dispatch, getState) => {
       dispatch({
         type: types.FETCH_PRODUCTS_SUCCESS,
         // Using normalizr to create a products object that
-        // is easier to handle with redux.
+        // is easier to handle with redux. Maybe unnecessary in this case
+        // but good practice if app is to have crud functionality in the future.
         response: normalize(response, schema.arrayOfProducts),
       })
     },
     error => {
       dispatch({
         type: types.FETCH_PRODUCTS_FAILURE,
-        message: error.message || 'Något gick fel.',
+        message: error.message || 'Ett okänt fel uppstod. Försök igen senare.',
       })
     }
   )

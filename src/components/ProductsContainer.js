@@ -1,9 +1,13 @@
+// This class is the only one component that has access to redux state and action creators.
+// Inspired by pattern described in this article:
+// https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.p28lloz3l
+
 import React, { Component, PropTypes } from 'react'
 import { fetchProducts, addCategoryToFilter, addSeachQueryToFilter } from '../actions'
 import { connect } from 'react-redux'
 import './ProductsContainer.css'
 import ProductList from './ProductList'
-import { getArrayOfCategories, getIsFetching, getFilter, getProductsByFilter } from '../reducers/products'
+import { getArrayOfCategories, getIsFetching, getFilter, getProductsByFilter, getErrorMessage } from '../reducers/products'
 import CategoriesSidebar from './CategoriesSidebar'
 
 class ProductsContainer extends Component {
@@ -11,26 +15,28 @@ class ProductsContainer extends Component {
     super(props)
     this.addCategoryToFilter = this.addCategoryToFilter.bind(this)
     this.addSeachQueryToFilter = this.addSeachQueryToFilter.bind(this)
+    this.retryFetchProducts = this.retryFetchProducts.bind(this)
   }
 
   componentWillMount() {
-    // Fetch all product when componen mounts.
-    const { dispatch } = this.props
-    dispatch(fetchProducts())
+    // Fetch all products from "API"
+    this.props.dispatch(fetchProducts())
   }
 
   addCategoryToFilter(category) {
-    const { dispatch } = this.props
-    dispatch(addCategoryToFilter(category))
+    this.props.dispatch(addCategoryToFilter(category))
   }
 
   addSeachQueryToFilter(query) {
-    const { dispatch } = this.props
-    dispatch(addSeachQueryToFilter(query))
+    this.props.dispatch(addSeachQueryToFilter(query))
+  }
+
+  retryFetchProducts() {
+    this.props.dispatch(fetchProducts())
   }
 
   render() {
-    const { isFetching, products, ids, categories, filter } = this.props
+    const { isFetching, productsToShow, categories, filter, errorMessage } = this.props
 
     return (
       <div className="ProductsContainer">
@@ -45,10 +51,11 @@ class ProductsContainer extends Component {
           <div className="col-md-8">
             <ProductList
               isFetching={isFetching}
-              products={products}
-              ids={ids}
+              errorMessage={errorMessage}
+              products={productsToShow}
               filter={filter}
               onSearch={this.addSeachQueryToFilter}
+              retryFetch={this.retryFetchProducts}
             />
           </div>
         </div>
@@ -58,24 +65,22 @@ class ProductsContainer extends Component {
 }
 
 ProductsContainer.propTypes = {
-  products: PropTypes.object,
-  ids: PropTypes.array,
+  productsToShow: PropTypes.arrayOf(PropTypes.object),
   isFetching: PropTypes.bool,
   categories: PropTypes.array,
+  errorMessage: PropTypes.string,
   filter: PropTypes.shape({
     query: PropTypes.string.isRequired,
     categories: PropTypes.array.isRequired,
   })
 }
 
-const mapStateToProps = ({ products }) => {
-  return {
-    products: products.all,
-    isFetching: getIsFetching(products),
-    categories: getArrayOfCategories(products),
-    filter: getFilter(products),
-    ids: getProductsByFilter(products)
-  }
-}
+const mapStateToProps = ({ products }) => ({
+  productsToShow: getProductsByFilter(products),
+  errorMessage: getErrorMessage(products),
+  isFetching: getIsFetching(products),
+  categories: getArrayOfCategories(products),
+  filter: getFilter(products),
+})
 
 export default connect(mapStateToProps)(ProductsContainer)

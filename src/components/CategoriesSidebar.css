@@ -1,3 +1,7 @@
+.CategoriesSidebar {
+  margin-top: 42px;
+}
+
 .CategoriesSidebar .btn-group-vertical .btn.btn-default {
   margin-top: 5px;
 }
@@ -18,8 +22,4 @@
   cursor: pointer;
   background-color: #F5F5F5;
   color: #00bcd4;
-}
-
-.CategoriesSidebar-menu li a.active {
-
 }

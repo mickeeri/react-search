@@ -2,8 +2,7 @@ import { combineReducers } from 'redux'
 import * as types from '../constants/ActionTypes'
 
 const getCategoriesFilter = (currentCategories, categoryToAdd) => {
-  // Check if the new category already is in the array, and
-  // then remove it.
+  // If category is already in categories, remove it.
   if (currentCategories.includes(categoryToAdd)) {
     const index = currentCategories.indexOf(categoryToAdd)
     return [
@@ -12,7 +11,7 @@ const getCategoriesFilter = (currentCategories, categoryToAdd) => {
     ]
   } else {
     // Else just return a shallow copy of the
-    // array with new category.
+    // array with the new category.
     return [
       ...currentCategories,
       categoryToAdd
@@ -44,7 +43,7 @@ const ids = (state = [], action) => {
   }
 }
 
-const filter = (state = { query:'', categories: [] }, action) => {
+const filter = (state = { query: '', categories: [] }, action) => {
   switch (action.type) {
     case types.ADD_CATEGORY_TO_FILTER:
       return {
@@ -73,20 +72,34 @@ const isFetching = (state = false, action) => {
   }
 }
 
+const errorMessage = (state = null, action) => {
+  switch (action.type) {
+    case types.FETCH_PRODUCTS_FAILURE:
+      return action.message
+    case types.FETCH_PRODUCTS_SUCCESS:
+      return null
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   all,
   isFetching,
   ids,
   filter,
+  errorMessage,
 })
 
 export const getIsFetching = (state) => state.isFetching
 
 export const getFilter = (state) => state.filter
 
+export const getErrorMessage = (state) => state.errorMessage
+
 // Creates an array of product categories.
-export const getArrayOfCategories = (state) => {
-  const obj = state.all
+export const getArrayOfCategories = ({ all }) => {
+  const obj = all
 
   // Create the array.
   const allCategories = Object.keys(obj).map((key) => obj[key]['kategori_namn'])
@@ -97,50 +110,43 @@ export const getArrayOfCategories = (state) => {
   return uniqueArray
 }
 
-export const getProductsByFilter = (state) => {
-  const products = state.all
-  const ids = state.ids
-  const { categories, query } = getFilter(state)
-  let filteredProductIds = []
-
-  // Just return all product ids if empty categories array and
-  // blank search query.
-  if (!categories.length && query === '') {
-    return ids
+// Filter product with array of categories.
+const byCategories = ({ kategori_namn }, categories) => {
+  if (!Array.isArray(categories)) {
+    throw new Error('Expected categories to be an array.')
   }
 
-  // Else return ids of products that match values
-  // in categories array.
-  ids.forEach(id => {
-    if (categories.length) {
-      const productName = products[id].produkt_namn.toLowerCase()
-      if (categories.includes(products[id].kategori_namn) && productName.includes(query.toLowerCase())) {
-        filteredProductIds = [...filteredProductIds, id]
+  return categories.includes(kategori_namn)
+}
 
-        if (query !== '') {
-          if (productName.includes(query.toLowerCase()) && categories.includes(products[id].kategori_namn)) {
-            filteredProductIds = [...filteredProductIds, id]
-            filteredProductIds = filteredProductIds.filter((value, i, arr) => arr.indexOf(value) === i)
-          }
-        }
-      }
-    } else {
+// Filter product by search query.
+const bySearchQuery = ({ produkt_namn }, query) => {
+  if (typeof query !== 'string') {
+    throw new Error('Expected query to be a string.')
+  }
 
+  return produkt_namn.toLowerCase().includes(query.toLowerCase())
+}
 
+// Returns array of product objects after being filtered by query and category.
+export const getProductsByFilter = ({ ids, all, filter: { categories, query }}) => {
+  // Create an array of product objects.
+  let products = ids.map(id => all[id])
 
+  // Return all products if filters are empty.
+  if (!categories.length && query === '') {
+    return products
+  }
 
-      if (query !== '') {
-        const productName = products[id].produkt_namn.toLowerCase()
+  // Filter the array of products by categories.
+  if (categories.length) {
+    products = products.filter((product) => byCategories(product, categories))
+  }
 
-        if (productName.includes(query.toLowerCase())) {
-          filteredProductIds = [...filteredProductIds, id]
-        }
+  // Filter by search query if query is not empty.
+  if (query !== '') {
+    products = products.filter((product) => bySearchQuery(product, query))
+  }
 
-      }
-
-    }
-
-  })
-
-  return filteredProductIds
+  return products
 }

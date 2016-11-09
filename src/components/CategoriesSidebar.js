@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import './CategoriesSidebar.css'
+import 'array-includes'
 
 const CategoriesSidebar = ({ categories, onSelectCategory, filter }) => {
   if (!categories.length) {

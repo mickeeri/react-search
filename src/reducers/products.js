@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import * as types from '../constants/ActionTypes'
 import Fuse from 'fuse.js'
+import 'array-includes'
 
 const getCategoriesFilter = (currentCategories, categoryToAdd) => {
   // If category is already in categories, remove it.

@@ -2,6 +2,7 @@
   "name": "react-search",
   "version": "0.1.0",
   "private": true,
+  "author": "Mikael Eriksson <mikael.eriksson00@gmail.com> (http://github.com/mickeeri)",
   "devDependencies": {
     "react-scripts": "0.7.0",
     "redux-logger": "^2.7.4"

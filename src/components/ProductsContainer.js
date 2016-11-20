@@ -11,31 +11,24 @@ import { getArrayOfCategories, getIsFetching, getFilter, getProductsByFilter, ge
 import CategoriesSidebar from './CategoriesSidebar'
 
 class ProductsContainer extends Component {
-  constructor(props) {
-    super(props)
-    this.addCategoryToFilter = this.addCategoryToFilter.bind(this)
-    this.addSeachQueryToFilter = this.addSeachQueryToFilter.bind(this)
-    this.retryFetchProducts = this.retryFetchProducts.bind(this)
-    this.resetFilter = this.resetFilter.bind(this)
-  }
 
   componentWillMount() {
     this.props.dispatch(fetchProducts())
   }
 
-  addCategoryToFilter(category) {
+  addCategoryToFilter = (category) => {
     this.props.dispatch(addCategoryToFilter(category))
   }
 
-  addSeachQueryToFilter(query) {
+  addSeachQueryToFilter = (query) => {
     this.props.dispatch(addSeachQueryToFilter(query))
   }
 
-  retryFetchProducts() {
+  retryFetchProducts = () => {
     this.props.dispatch(fetchProducts())
   }
 
-  resetFilter() {
+  resetFilter = () => {
     this.props.dispatch(resetFilter())
   }
 

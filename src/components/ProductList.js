@@ -45,11 +45,14 @@ const ProductList = ({ isFetching, products, onSearch, filter, errorMessage, ret
           />
         </div>
       </div>
-      <ul className="list-group">
-        {products.map(product =>
-          <ProductListItem key={product.produkt_id} product={product} />
-        )}
-      </ul>
+      {!isFetching && !products.length ?
+        <div className="alert alert-info">Ingen träff</div> :
+        <ul className="list-group">
+          {products.map(product =>
+            <ProductListItem key={product.produkt_id} product={product} />
+          )}
+        </ul>
+      }
     </div>
     )
 }

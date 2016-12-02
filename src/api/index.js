@@ -8,7 +8,7 @@ const delay = (ms) =>
 
 /**
  * This is used to simulate fetching of products from a backend API.
- * Has delay and occational error.
+ * Has delay and occational network error.
  * @return {Array}
  */
 export const fetchProducts = () => {

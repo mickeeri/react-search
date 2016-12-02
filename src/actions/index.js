@@ -35,29 +35,23 @@ export const fetchProducts = () => (dispatch, getState) => {
  * Dispatches action when new category is to be added to filter.
  * @param {string} categoryToAdd
  */
-export const addCategoryToFilter = (categoryToAdd) => (dispatch) => {
-  dispatch({
-    type: types.ADD_CATEGORY_TO_FILTER,
-    categoryToAdd,
-  })
-}
+export const addCategoryToFilter = (categoryToAdd) => ({
+  type: types.ADD_CATEGORY_TO_FILTER,
+  categoryToAdd,
+})
 
 /**
  * Add user input from search field to the filter.
  * @param {string} queryToAdd
  */
-export const addSeachQueryToFilter = (queryToAdd) => (dispatch) => {
-  dispatch({
-    type: types.ADD_SEARCH_QUERY_TO_FILTER,
-    queryToAdd,
-  })
-}
+export const addSeachQueryToFilter = (queryToAdd) => ({
+  type: types.ADD_SEARCH_QUERY_TO_FILTER,
+  queryToAdd,
+})
 
 /**
  * Reset the filter
  */
-export const resetFilter = () => (dispatch) => {
-  dispatch({
-    type: types.RESET_PRODUCTS_FILTER,
-  })
-}
+export const resetFilter = () => ({
+  type: types.RESET_PRODUCTS_FILTER
+})
